@@ -46,19 +46,22 @@ const ownerSchema = new mongoose.Schema({
 });
 
 // Hash password before save - FIXED VERSION
-ownerSchema.pre('save', function (next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
+ownerSchema.pre('save', async function (next) {
+  try {
+    // Only hash if password is modified
+    if (!this.isModified('password')) {
+      return next();
+    }
 
-  if (this.password) {
-    bcrypt.hash(this.password, 10, (err, hash) => {
-      if (err) return next(err);
-      this.password = hash;
-      next();
-    });
-  } else {
+    // Hash password
+    const hashedPassword = await bcrypt.hash(this.password, 10);
+
+    // Replace plain password with hashed password
+    this.password = hashedPassword;
+
     next();
+  } catch (error) {
+    next(error);
   }
 });
 

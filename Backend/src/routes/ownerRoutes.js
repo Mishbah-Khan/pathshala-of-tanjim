@@ -2,7 +2,6 @@ import express from 'express';
 import { protectOwner } from '../middleware/auth.js';
 import {
   ownerLogin,
-  registerOwner ,
   ownerLogout,
   getOwnerProfile,
   updateOwnerProfile,
@@ -31,7 +30,6 @@ const router = express.Router();
 
 // ========== PUBLIC ROUTES ==========
 router.post('/login', ownerLogin);
-router.post('/register', registerOwner);
 router.post('/logout', protectOwner, ownerLogout);
 
 // ========== PROTECTED ROUTES (Owner Only) ==========
