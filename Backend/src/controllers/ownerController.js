@@ -14,7 +14,59 @@ const generateToken = (id, role) => {
   });
 };
 
+
 // ========== AUTH CONTROLLERS ==========
+export const registerOwner = async (req, res) => {
+  try {
+    const {
+      name,
+      email,
+      password,
+      profileImage,
+      bio,
+      teachingStyle,
+      achievements,
+    } = req.body;
+
+    // Check if owner already exists
+    const existingOwner = await Owner.findOne({ email });
+
+    if (existingOwner) {
+      return res.status(400).json({
+        success: false,
+        message: 'Owner already exists',
+      });
+    }
+
+    // Create new owner
+    const owner = await Owner.create({
+      name,
+      email,
+      password,
+      profileImage,
+      bio,
+      teachingStyle,
+      achievements,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: 'Owner registered successfully',
+      data: {
+        _id: owner._id,
+        name: owner.name,
+        email: owner.email,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Owner registration failed',
+      error: error.message,
+    });
+  }
+};
+
 export const ownerLogin = async (req, res) => {
   try {
     const { email, password } = req.body;

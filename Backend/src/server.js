@@ -18,6 +18,7 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:5173',
   'https://tanjim-s-pathshala-frontend.vercel.app/',
+  'https://pathshala-of-tanjim.vercel.app/'
 ];
 
 app.use(
